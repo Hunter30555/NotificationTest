@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
@@ -32,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
     private Calendar calendar;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
-    //private ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         b1 = findViewById(R.id.button);
         b1.setOnClickListener(v -> showTimePicker());
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             // Parameters: String ID, String NAME, IMPORTANCE
             channel = new NotificationChannel(CHANNEL_ID, "My notification name", NotificationManager.IMPORTANCE_DEFAULT);
             //channel.setDescription("This is the channel description");
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NotificationManager.class);//Context.NOTIFICATION_SERVICE);
 
             //TODO: Add channel attributes like description or vibration here.
             /*
@@ -96,11 +97,11 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Calendar will get the values from the timePicker object
-                calendar = calendar.getInstance();
+                calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, picker.getHour());
-                calendar.set(calendar.MINUTE, picker.getMinute());
+                calendar.set(Calendar.MINUTE, picker.getMinute());
                 calendar.set(Calendar.SECOND, 0);      // This program does not need to be second specific
-                calendar.set(calendar.MILLISECOND, 0); // Also no need to be this specific so we default to 0
+                calendar.set(Calendar.MILLISECOND, 0); // Also no need to be this specific so we default to 0
 
                 setAlarm();
             }
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Think about changing this to just be .set depending on if we want this to not repeat or repeat every day
 
         // AlarmManager.RTC_WAKEUP will wake up the phone when the alarm goes off, millis is the time for the alarm to go off, alarm interval, pendingIntent being sent
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         Toast.makeText(this, "Alarm set successfully", Toast.LENGTH_SHORT).show();
     }
 

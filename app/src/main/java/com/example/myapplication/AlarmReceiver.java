@@ -11,28 +11,13 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-//TODO: ADD A CANCEL ALARM METHOD
-
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-
-
-
         // Allows us to create an intent on the notification to load a page.
         Intent notificationIntent = new Intent(context, ResultActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-/*
-        // Specifies the pendingIntent parameters based on the phone version. Our emulator version is more recent than the M version code.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        }else {
-            pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }*/
-        //builder.setContentIntent(pendingIntent);
-
-
 
         // Creates and sends notification to be displayed on the Android phone
 
@@ -48,19 +33,14 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.ic_launcher_foreground) // This is required for building a notification
                 .setContentTitle("Title for notification")       // ALso required
                 .setContentText("Text describing notification")  // Also required
-                .setOngoing(true)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent); // Change this later
 
+        // Allows us to click a notification and send it. It should have a different ID for multiple notifications.
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(1, builder.build()); // Parameters: ID, NotificationCompat
-
-
-        // Allows us to click a notification and send it. It should have a different ID for multiple notifications.
-        NotificationManagerCompat notificationManagerC = NotificationManagerCompat.from(context);
-        notificationManagerC.notify(1, builder.build());
 
         // End notification creation and display
 
